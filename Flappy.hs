@@ -133,20 +133,17 @@ seeInput Playing game = do
 seeInput GameOver game = do
     mUp <- mouseUpL
     key <- keyUp KeySpace
-    if (key || mUp) && 460 <= posY (pos game)
-        then do
-            if highscore game < (points game)
-                then do
-                    liftIO $ removeFile "score"
-                    liftIO $ writeFile "score" $ show $ points game    
-                    return $ refresh game
-                else return game
+    when (highscore game < points game) $ do
+        liftIO $ removeFile "score"
+        liftIO $ writeFile "score" $ show $ points game
+    if (key || mUp) && 458 <= posY (pos game)
+        then return $ refresh game
         else return game
-    
 
 refresh game = game{
     state = Opening,
     points = 0,
+    highscore = max (highscore game) (points game),
     pos = V2 birdX 260,
     jumpPower = 0,
     gravitiy = 3,
