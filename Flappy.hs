@@ -74,7 +74,6 @@ mainloop game = do
             drawButtons game
             translate (pos game) $ bitmap (bird game)
             next <- seeInput Opening game
-            debug (font game).show $ state next
             tick
             mainloop next
         Playing -> do
@@ -82,7 +81,6 @@ mainloop game = do
             translate (pos game) $ bitmap (bird game)
             next' <- seeInput Playing game
             let y = nextPos (pos game) (jumpPower next') (gravitiy game)
-            debug (font game) $ show (gravitiy game)
             showPoints (font game) $ points game
             next <- update Playing $ game {pos = y, jumpPower = nextJump (jumpPower next')}
             tick
